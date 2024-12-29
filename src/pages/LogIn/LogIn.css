@@ -1,0 +1,76 @@
+.LoginBody {
+    background-image: url(../../assets/NPF.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.LoginBody::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Darken background */
+    z-index: 1;
+}
+
+.LoginBody form {
+    position: relative;
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.LoginBody form input,
+.LoginBody form select,
+.LoginBody form button {
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.LoginBody form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.LoginBody form button:hover {
+    background-color: #0056b3;
+}
+
+.LoginBody form label {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.LoginBody form select {
+    background-color: white;
+    color: #333;
+}
+
+.toRegister {
+    margin-top: 20px;
+    color: white;
+    z-index: 1;
+}

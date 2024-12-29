@@ -1,0 +1,53 @@
+.contact_us {
+  margin: 10px 300px;
+  padding-top: 50px;
+}
+
+#yourEmail,
+#yourFullname {
+  width: 570px;
+  height: 50px;
+  padding: 20px;
+  background-color: inherit;
+  border-radius: 10px;
+  border: 1px solid inherit;
+}
+
+#yourMessage {
+  padding: 20px;
+  background-color: inherit;
+  border-radius: 10px;
+  border: 1px solid inherit;
+}
+
+#sendMesagebtn {
+  width: 570px;
+  height: 50px;
+  background-color: rgb(29, 11, 109);
+  border-radius: 5px;
+  color: white;
+}
+
+#sendMesagebtn:hover,
+#sendMesagebtn::after {
+  background-color: rgb(3, 3, 41);
+}
+
+@media screen and (max-width: 980px) {
+  .contact_us {
+    margin: 10px 30px;
+    padding-top: 10px;
+    padding-bottom: 50px;
+  }
+  #yourEmail,
+  #yourFullname {
+    width: 300px;
+    height: 50px;
+  }
+  #yourMessage {
+    width: 300px;
+  }
+  #sendMesagebtn {
+    width: 300px;
+  }
+}

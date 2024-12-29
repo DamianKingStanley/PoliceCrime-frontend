@@ -1,0 +1,46 @@
+.Notifications {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 300px;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.Notifications h2 {
+    margin: 0;
+    padding: 10px;
+    background: #2c3e50;
+    color: white;
+}
+
+.Notifications ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.Notifications li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Notifications .notification.info {
+    background: #e7f3fe;
+}
+
+.Notifications .notification.critical {
+    background: #fbe3e4;
+}
+
+.Notifications button {
+    background: none;
+    border: none;
+    color: blue;
+    cursor: pointer;
+}

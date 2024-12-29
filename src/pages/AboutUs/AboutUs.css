@@ -1,0 +1,23 @@
+.AboutUsSection {
+    padding: 20px 100px;
+}
+
+.AboutUsSection h1 {
+    text-align: center;
+    color: #1b2379;
+}
+
+.AboutUsSection span {
+    padding: 0px 5px;
+}
+
+.AboutUsSection a {
+    text-decoration: none;
+    color: #1b2379;
+}
+
+@media screen and (max-width: 980px) {
+    .AboutUsSection {
+        padding: 20px 30px;
+    }
+}

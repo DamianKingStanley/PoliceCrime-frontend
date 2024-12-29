@@ -1,0 +1,74 @@
+.users-list-container {
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 1200px;
+  background-color: #f9f9f9;
+}
+
+.users-list-container h2 {
+  text-align: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin: 20px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Heading style */
+
+.users-list-container h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Table styling */
+
+.users-list-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.users-list-table th,
+.users-list-table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.users-list-table th {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+}
+
+.users-list-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.users-list-table tr:hover {
+  background-color: #e9ecef;
+}
+
+/* Loading and error messages */
+
+.users-list-message {
+  font-size: 18px;
+  color: #333;
+  text-align: center;
+  margin-top: 20px;
+}
+
+@media screen and (max-width: 980px) {
+  .users-list-container {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 100%;
+    background-color: #f9f9f9;
+  }
+}

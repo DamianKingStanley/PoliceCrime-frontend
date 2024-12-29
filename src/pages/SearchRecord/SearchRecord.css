@@ -1,0 +1,131 @@
+.SearchRecordComponent {
+  padding: 20px 100px;
+  background-color: #f5f5f5;
+  /* height: 100vh; */
+  font-family: Arial, sans-serif;
+}
+
+.toFind {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.toFind h2 {
+  font-size: 25px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.toFind input {
+  width: 500px;
+  height: 40px;
+  padding-left: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+}
+
+.toFind button {
+  width: 150px;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.toFind button:hover,
+.toFind button:after {
+  background-color: #0456ad;
+}
+
+.status {
+  font-size: 16px;
+  color: red;
+  font-weight: bold;
+  border: 2px solid red;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.error {
+  color: red;
+  text-align: center;
+}
+
+.SearchRecordComponentresults ul {
+  list-style-type: none;
+}
+
+.SearchRecordComponentresults {
+  text-align: center;
+}
+
+.photos img {
+  width: 200px;
+  height: 200px;
+  margin: 3px;
+}
+
+.Recordphoto-grid {
+  gap: 20px;
+}
+
+.record-card {
+  background-color: white;
+  border: 1px solid #ccc;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.record-card h4 {
+  font-size: 40px;
+  color: #444;
+}
+
+.Recordcrimes li {
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.Recordcrimes li p {
+  margin: 0;
+  font-size: 20px;
+  color: #555;
+}
+
+.Recordcrimes li {
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.Recordcrimes li p {
+  margin: 0;
+  font-size: 20px;
+  color: #555;
+}
+
+@media screen and (max-width: 980px) {
+  .SearchRecordComponent {
+    padding: 20px 0px;
+  }
+  .toFind input {
+    width: 300px;
+  }
+  #gridimages {
+    width: 100px;
+    height: 100px;
+  }
+}

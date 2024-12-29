@@ -1,0 +1,176 @@
+.SignInbody {
+  background-image: url(../../assets/NPFF.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.SignInbody::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
+
+.register {
+  position: relative;
+  z-index: 2;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 1;
+  position: relative;
+  height: fit-content;
+  max-width: 500px;
+  text-align: center;
+}
+
+.register input,
+.register select,
+.register button {
+  margin: 10px 0;
+  padding: 10px;
+  width: 460px;
+  /* max-width: 300px; */
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.register button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.register button:hover {
+  background-color: #0056b3;
+}
+
+.register label {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.register select {
+  background-color: white;
+  color: #333;
+}
+
+.pswd-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.pswd-container input {
+  flex: 1;
+}
+
+.pswd-toggle-icon {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: red;
+}
+
+#passwordmatchAlert p {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.success-message {
+  color: green;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.error-message {
+  color: red;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 8px solid rgba(0, 0, 0, 0.1);
+  /* Light grey background */
+  border-radius: 50%;
+  border-top: 8px solid #007bff;
+  /* Blue color for spinner */
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  z-index: 5;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  color: #d9534f;
+  /* Red color for error messages */
+  background-color: #f2dede;
+  /* Light red background */
+  border: 1px solid #d9534f;
+  padding: 15px;
+  border-radius: 5px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.success-message {
+  color: #5bc0de;
+  /* Blue color for success messages */
+  background-color: #d9edf7;
+  /* Light blue background */
+  border: 1px solid #5bc0de;
+  padding: 15px;
+  border-radius: 5px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+@media screen and (max-width: 980px) {
+  .register {
+    max-width: 300px;
+  }
+  .register input,
+  .register select,
+  .register button {
+    width: 250px;
+  }
+  .loader {
+    position: fixed;
+    top: 40%;
+    left: 40%;
+  }
+}
