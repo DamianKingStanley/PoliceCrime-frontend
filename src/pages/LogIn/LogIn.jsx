@@ -1,50 +1,52 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-
+import { FaEye, FaEyeSlash, FaShieldAlt, FaUserCog, FaIdBadge } from "react-icons/fa";
 import axios from "axios";
 import { useAuth } from "../../component/AuthContext";
 import "./LogIn.css";
 import policelogo from "../../assets/policelogo.png";
 
 const LogIn = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("officer");
-  const [error, setError] = useState(""); // For error messages
-  const [loading, setLoading] = useState(false); // For loading state
+  const [credentials, setCredentials] = useState({
+    username: "",
+    password: "",
+    role: "officer"
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCredentials(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(""); // Clear previous errors
+    setError("");
 
     try {
-      const response = await axios.post("http://localhost:5000/user/login", {
-        username,
-        password,
-        role,
-      });
+      const response = await axios.post(
+        "https://policecrimeserver.onrender.com/user/login",
+        credentials
+      );
 
       const { result, token } = response.data;
 
       if (!result || !token) {
-        throw new Error("Missing user data or token in response");
+        throw new Error("Authentication data missing in response");
       }
 
       login(result, token);
-
-      if (role === "admin") {
-        navigate("/create");
-      } else {
-        navigate("/");
-      }
+      navigate(credentials.role === "admin" ? "/create" : "/");
+      
     } catch (error) {
       setError(
-        error.response?.data?.message || "Login failed. Please try again."
+        error.response?.data?.message || 
+        "Authentication failed. Please verify your credentials."
       );
     } finally {
       setLoading(false);
@@ -52,57 +54,113 @@ const LogIn = () => {
   };
 
   return (
-    <div className="LoginBody">
-      <div className="NPFlogodiv">
-        <Link to="/">
-          <img src={policelogo} alt="logo" />
-        </Link>
-      </div>
-      <form onSubmit={handleSubmit}>
-        {error && <div className="error-message">{error}</div>}
-        {loading && <div className="loader"></div>}
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Badge Number"
-          required
-        />
-        <div className="pswd-container">
-          <input
-            type={showPassword ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            required
-          />
-          <span
-            className="pswd-toggle-icon"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
-          </span>
+    <div className="login-container">
+      <div className="login-card">
+        {/* Header Section */}
+        <div className="login-header">
+          <Link to="/" className="logo-link">
+            <img src={policelogo} alt="Police Department Logo" className="login-logo" />
+          </Link>
+          <h1 className="system-title">Law Enforcement Portal</h1>
+          <p className="system-subtitle">Secure Criminal Records Access</p>
         </div>
 
-        <label>
-          Role:
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            required
+        {/* Error Message */}
+        {error && (
+          <div className="alert alert-error">
+            <FaShieldAlt className="alert-icon" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Login Form */}
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <label htmlFor="username" className="input-label">
+              <FaIdBadge className="input-icon" />
+              Badge Number
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={credentials.username}
+              onChange={handleChange}
+              placeholder="Enter your badge number"
+              required
+              className="form-input"
+              autoComplete="username"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password" className="input-label">
+              <FaShieldAlt className="input-icon" />
+              Password
+            </label>
+            <div className="password-input-container">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={credentials.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                required
+                className="form-input"
+                autoComplete="current-password"
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="role" className="input-label">
+              <FaUserCog className="input-icon" />
+              Access Level
+            </label>
+            <select
+              id="role"
+              name="role"
+              value={credentials.role}
+              onChange={handleChange}
+              required
+              className="form-select"
+            >
+              <option value="officer">Patrol Officer</option>
+              <option value="admin">Administrator</option>
+            </select>
+          </div>
+
+          <button 
+            type="submit" 
+            className="login-button"
+            disabled={loading}
           >
-            <option value="admin">Admin</option>
-            <option value="officer">Officer</option>
-          </select>
-        </label>
-        <button type="submit" disabled={loading}>
-          Log In
-        </button>
-      </form>
-      <div className="toRegister">
-        <p>
-          Or click <Link to="/register">here</Link> to register
-        </p>
+            {loading ? (
+              <span className="login-spinner"></span>
+            ) : (
+              "Secure Login"
+            )}
+          </button>
+        </form>
+
+        {/* Footer Links */}
+        <div className="login-footer">
+          <p className="register-link">
+            Need access? <Link to="/register">Request credentials</Link>
+          </p>
+          <p className="security-notice">
+            <FaShieldAlt /> Secure Law Enforcement System
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -1,72 +1,354 @@
-/* components/AdvancedSearch.css */
-
-.AdvancedSearch {
-    padding: 20px 100px;
+/* Advanced Search Styles */
+:root {
+  --primary-blue: #1a237e;
+  --dark-blue: #0d1440;
+  --accent-red: #c62828;
+  --light-gray: #f5f7fa;
+  --medium-gray: #e0e5ec;
+  --dark-gray: #455a64;
+  --white: #ffffff;
+  --text-dark: #263238;
+  --success-green: #2e7d32;
+  --warning-orange: #ff9800;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
-.AdvancedSearch h2 {
-    text-align: center;
+/* Base Styles */
+.advanced-search-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--light-gray);
 }
 
-.searchCriteria {
-    display: flex;
+/* Header Styles */
+.advanced-search-container .search-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--primary-blue);
+  color: var(--white);
+  box-shadow: var(--shadow-md);
+  gap: 1.5rem;
+}
+
+.advanced-search-container .logo-link {
+  display: flex;
+  align-items: center;
+}
+
+.advanced-search-container .search-logo {
+  height: 50px;
+  width: auto;
+}
+
+.advanced-search-container .page-title {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.advanced-search-container .title-icon {
+  font-size: 1.2rem;
+}
+
+/* Main Content Styles */
+.advanced-search-container .search-main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+}
+
+/* Search Panel Styles */
+.advanced-search-container .search-panel {
+  background-color: var(--white);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  height: fit-content;
+  position: sticky;
+  top: 1rem;
+  /* width: fit-content; */
+}
+
+.advanced-search-container .search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.advanced-search-container .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.advanced-search-container .form-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+
+.advanced-search-container .input-icon {
+  color: var(--primary-blue);
+  font-size: 0.9rem;
+}
+
+.advanced-search-container .form-input,
+.advanced-search-container .form-select {
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--medium-gray);
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.advanced-search-container .form-input:focus,
+.advanced-search-container .form-select:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+}
+
+.advanced-search-container .date-range-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.advanced-search-container .form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.advanced-search-container .search-button {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  padding: 0.9rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.advanced-search-container .search-button:hover {
+  background-color: var(--dark-blue);
+}
+
+.advanced-search-container .search-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.advanced-search-container .button-icon {
+  font-size: 0.9rem;
+}
+
+.advanced-search-container .clear-button {
+  background: none;
+  border: 1px solid var(--primary-blue);
+  color: var(--primary-blue);
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.advanced-search-container .clear-button:hover {
+  background-color: rgba(26, 35, 126, 0.05);
+}
+
+/* Results Section Styles */
+.advanced-search-container .results-section {
+  flex: 1;
+}
+
+.advanced-search-container .error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem;
+  background-color: #ffebee;
+  color: var(--accent-red);
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.advanced-search-container .error-icon {
+  font-size: 1rem;
+}
+
+.advanced-search-container .results-container {
+  background-color: var(--white);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.advanced-search-container .results-header {
+  color: var(--primary-blue);
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--medium-gray);
+}
+
+.advanced-search-container .records-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.advanced-search-container .record-card {
+  border: 1px solid var(--medium-gray);
+  border-radius: 6px;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.advanced-search-container .record-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.advanced-search-container .record-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--medium-gray);
+}
+
+.advanced-search-container .record-icon {
+  color: var(--primary-blue);
+  font-size: 1.2rem;
+}
+
+.advanced-search-container .record-name {
+  flex: 1;
+  font-size: 1.1rem;
+  color: var(--text-dark);
+}
+
+.advanced-search-container .record-status {
+  background-color: rgba(198, 40, 40, 0.1);
+  color: var(--accent-red);
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.advanced-search-container .crimes-list h4 {
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.advanced-search-container .crime-item {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--medium-gray);
+}
+
+.advanced-search-container .crime-item:last-child {
+  border-bottom: none;
+}
+
+.crime-type {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.advanced-search-container .crime-icon {
+  color: var(--primary-blue);
+  font-size: 0.9rem;
+}
+
+.crime-details {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+  margin-left: 1.4rem;
+}
+
+.advanced-search-container .detail-icon {
+  margin-right: 0.3rem;
+  color: var(--dark-gray);
+}
+
+.advanced-search-container .crime-status {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.advanced-search-container .crime-status.active {
+  background-color: #ffebee;
+  color: var(--accent-red);
+}
+
+.crime-status.closed {
+  background-color: #e8f5e9;
+  color: var(--success-green);
+}
+
+.advanced-search-container .crime-status.pending {
+  background-color: #fff8e1;
+  color: var(--warning-orange);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .advanced-search-container .search-main {
+    grid-template-columns: 1fr;
+  }
+
+  .advanced-search-container .search-panel {
+    position: static;
+  }
+
+  .advanced-search-container .date-range-group {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .advanced-search-container .search-header {
     flex-direction: column;
-    gap: 10px;
-}
+    gap: 1rem;
+    text-align: center;
+    padding: 1rem;
+  }
 
-.searchCriteria input {
-    padding: 10px;
-    font-size: 16px;
-}
+  .advanced-search-container .search-main {
+    padding: 1rem;
+  }
 
-.searchCriteria button {
-    padding: 10px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.error-message {
-    color: red;
-    margin-top: 10px;
-}
-
-.searchResults {
-    margin-top: 20px;
-}
-
-.SearchrecordItem {
-    background-color: #f9f9f9;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    z-index: 1;
-}
-
-.SearchrecordItem h4 {
-    margin: 0;
-}
-
-.SearchrecordItem ul {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-.SearchrecordItem ul li {
-    margin-bottom: 5px;
-}
-
-@media screen and (max-width: 980px) {
-    .AdvancedSearch {
-        padding: 20px 10px;
-    }
+  .advanced-search-container .form-actions {
+    flex-direction: column;
+  }
 }

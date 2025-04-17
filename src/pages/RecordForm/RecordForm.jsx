@@ -2,77 +2,31 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../component/AuthContext";
+import {
+  FaUser,
+  FaCamera,
+  FaGavel,
+  FaExclamationTriangle,
+  FaCheck,
+  FaPlus,
+  FaTrash,
+  FaUpload,
+  FaSpinner,
+} from "react-icons/fa";
 import policelogo from "../../assets/policelogo.png";
 import "./RecordForm.css";
 
 const RecordForm = () => {
-  const [name, setName] = useState("");
-  const [status, setStatus] = useState([]);
-  const [photos, setPhotos] = useState([]);
-  const [crimes, setCrimes] = useState([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    status: [],
+    photos: [],
+    crimes: [],
+  });
   const [errorResponse, setErrorResponse] = useState(null);
-  const [loading, setLoading] = useState(false); // State for loader
+  const [loading, setLoading] = useState(false);
   const { user, token } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user || !token) {
-      setErrorResponse("User information is missing. Please log in.");
-    }
-  }, [user, token]);
-
-  const handleStatusChange = (e) => {
-    const { value, checked } = e.target;
-    setStatus((prevStatus) =>
-      checked ? [...prevStatus, value] : prevStatus.filter((s) => s !== value)
-    );
-  };
-
-  const handlePhotosChange = (e) => {
-    setPhotos(Array.from(e.target.files));
-  };
-
-  const handleCrimeChange = (index, field, value) => {
-    const newCrimes = [...crimes];
-    newCrimes[index][field] = value;
-    setCrimes(newCrimes);
-  };
-
-  const addCrime = () => {
-    setCrimes([...crimes, { type: "", date: "", status: "" }]);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("status", JSON.stringify(status));
-    formData.append("crimes", JSON.stringify(crimes));
-    photos.forEach((photo) => {
-      formData.append("photos", photo);
-    });
-
-    try {
-      await axios.post(
-        "http://localhost:5000/create-record",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      navigate("/");
-    } catch (error) {
-      console.error("Error submitting record:", error);
-      setErrorResponse("Error submitting record.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const statusOptions = [
     "Wanted",
@@ -91,110 +45,329 @@ const RecordForm = () => {
     "Bail/Bond",
   ];
 
+  useEffect(() => {
+    if (!user || !token) {
+      navigate("/login");
+    }
+  }, [user, token, navigate]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleStatusChange = (e) => {
+    const { value, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      status: checked
+        ? [...prev.status, value]
+        : prev.status.filter((s) => s !== value),
+    }));
+  };
+
+  const handlePhotosChange = (e) => {
+    setFormData((prev) => ({ ...prev, photos: Array.from(e.target.files) }));
+  };
+
+  const handleCrimeChange = (index, field, value) => {
+    const newCrimes = [...formData.crimes];
+    newCrimes[index][field] = value;
+    setFormData((prev) => ({ ...prev, crimes: newCrimes }));
+  };
+
+  const addCrime = () => {
+    setFormData((prev) => ({
+      ...prev,
+      crimes: [...prev.crimes, { type: "", date: "", status: "" }],
+    }));
+  };
+
+  const removeCrime = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      crimes: prev.crimes.filter((_, i) => i !== index),
+    }));
+  };
+
+  const removePhoto = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      photos: prev.photos.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append("status", JSON.stringify(formData.status));
+      formDataToSend.append("crimes", JSON.stringify(formData.crimes));
+      formData.photos.forEach((photo) => {
+        formDataToSend.append("photos", photo);
+      });
+
+      await axios.post(
+        "https://policecrimeserver.onrender.com/create-record",
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      navigate("/", { state: { success: "Record created successfully" } });
+    } catch (error) {
+      console.error("Error submitting record:", error);
+      setErrorResponse(
+        error.response?.data?.message ||
+          "Error submitting record. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="CreateRecordBody">
-      {loading && <div className="loader"></div>}
-      <div className="NPFlogodiv">
-        <Link to="/">
-          <img src={policelogo} alt="logo" />
+    <div className="record-form-container">
+      {/* Header Section */}
+      <header className="form-header">
+        <Link to="/" className="logo-link">
+          <img
+            src={policelogo}
+            alt="Police Department Logo"
+            className="form-logo"
+          />
         </Link>
-      </div>
-      <section className="CreateRecord">
-        <div className="recordFormDiv">
-          {errorResponse && <p className="form_response">{errorResponse}</p>}
-          <h1>CRIMINAL RECORD INFORMATION</h1>
-          <label>
-            <h3>Name</h3>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </label>
-          <br /> <br />
-          <label>
-            <h3>Status</h3>
-            <div>
+        <h1 className="form-title">New Criminal Record</h1>
+      </header>
+
+      {/* Main Form Content */}
+      <main className="form-main">
+        {errorResponse && (
+          <div className="alert alert-error">
+            <FaExclamationTriangle className="alert-icon" />
+            {errorResponse}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="record-form">
+          {/* Basic Information Section */}
+          <section className="form-section">
+            <h2 className="section-title">
+              <FaUser className="section-icon" />
+              Suspect Information
+            </h2>
+
+            <div className="form-group">
+              <label htmlFor="name" className="form-label">
+                Full Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="form-input"
+                placeholder="Enter suspect's full name"
+              />
+            </div>
+          </section>
+
+          {/* Status Section */}
+          <section className="form-section">
+            <h2 className="section-title">
+              <FaCheck className="section-icon" />
+              Legal Status
+            </h2>
+
+            <div className="status-grid">
               {statusOptions.map((option) => (
-                <label key={option}>
+                <div key={option} className="status-option">
                   <input
                     type="checkbox"
-                    id="recordcheckbox"
+                    id={`status-${option}`}
                     value={option}
-                    checked={status.includes(option)}
+                    checked={formData.status.includes(option)}
                     onChange={handleStatusChange}
+                    className="status-checkbox"
                   />
-                  {option}
-                </label>
+                  <label htmlFor={`status-${option}`} className="status-label">
+                    {option}
+                  </label>
+                </div>
               ))}
             </div>
-          </label>
-          <br /> <br />
-          <h3>Crimes</h3>
-          <button id="addCrimeBtn" type="button" onClick={addCrime}>
-            Add Crime
-          </button>
-          {crimes.map((crime, index) => (
-            <div key={index}>
-              <label>
-                <h4>Crime Type</h4>
-                <input
-                  type="text"
-                  id="crimeid"
-                  value={crime.type}
-                  onChange={(e) =>
-                    handleCrimeChange(index, "type", e.target.value)
-                  }
-                  required
-                />
-              </label>{" "}
-              <label>
-                <h4>Crime Date</h4>
-                <input
-                  type="date"
-                  value={crime.date}
-                  onChange={(e) =>
-                    handleCrimeChange(index, "date", e.target.value)
-                  }
-                  required
-                />{" "}
-              </label>
-              <label>
-                <h4>Crime Status</h4>
-                <input
-                  type="text"
-                  value={crime.status}
-                  onChange={(e) =>
-                    handleCrimeChange(index, "status", e.target.value)
-                  }
-                  required
-                />
-              </label>
-            </div>
-          ))}
-          <br /> <br />
-          <button id="createRecordBtn" onClick={handleSubmit}>
-            Submit
-          </button>
-        </div>
-        <div className="criminalPhotoDiv">
-          <label>
-            <h3> Four (4) Photos</h3>
-            <input type="file" multiple onChange={handlePhotosChange} />
-          </label>
-          <div className="photos-preview">
-            {photos.map((photo, index) => (
-              <img
-                key={index}
-                src={URL.createObjectURL(photo)}
-                alt={`Preview ${index + 1}`}
-                className={`photo-preview ${index === 0 ? "main-photo" : ""}`}
-              />
+          </section>
+
+          {/* Crimes Section */}
+          <section className="form-section">
+            <h2 className="section-title">
+              <FaGavel className="section-icon" />
+              Criminal Offenses
+            </h2>
+
+            {formData.crimes.map((crime, index) => (
+              <div key={index} className="crime-entry">
+                <div className="crime-header">
+                  <h3>Offense #{index + 1}</h3>
+                  <button
+                    type="button"
+                    className="remove-crime-btn"
+                    onClick={() => removeCrime(index)}
+                    aria-label="Remove crime"
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
+
+                <div className="crime-fields">
+                  <div className="form-group">
+                    <label
+                      htmlFor={`crime-type-${index}`}
+                      className="form-label"
+                    >
+                      Offense Type
+                    </label>
+                    <input
+                      type="text"
+                      id={`crime-type-${index}`}
+                      value={crime.type}
+                      onChange={(e) =>
+                        handleCrimeChange(index, "type", e.target.value)
+                      }
+                      required
+                      className="form-input"
+                      placeholder="e.g. Burglary, Assault"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label
+                      htmlFor={`crime-date-${index}`}
+                      className="form-label"
+                    >
+                      Date Committed
+                    </label>
+                    <input
+                      type="date"
+                      id={`crime-date-${index}`}
+                      value={crime.date}
+                      onChange={(e) =>
+                        handleCrimeChange(index, "date", e.target.value)
+                      }
+                      required
+                      className="form-input"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label
+                      htmlFor={`crime-status-${index}`}
+                      className="form-label"
+                    >
+                      Case Status
+                    </label>
+                    <input
+                      type="text"
+                      id={`crime-status-${index}`}
+                      value={crime.status}
+                      onChange={(e) =>
+                        handleCrimeChange(index, "status", e.target.value)
+                      }
+                      required
+                      className="form-input"
+                      placeholder="e.g. Open, Closed, Pending"
+                    />
+                  </div>
+                </div>
+              </div>
             ))}
+
+            <button type="button" className="add-crime-btn" onClick={addCrime}>
+              <FaPlus className="btn-icon" />
+              Add Another Offense
+            </button>
+          </section>
+
+          {/* Photos Section */}
+          <section className="form-section">
+            <h2 className="section-title">
+              <FaCamera className="section-icon" />
+              Suspect Photos
+            </h2>
+
+            <div className="photo-upload">
+              <label htmlFor="photos" className="upload-label">
+                <FaUpload className="upload-icon" />
+                <span>Upload Photos (Minimum 4)</span>
+                <input
+                  type="file"
+                  id="photos"
+                  onChange={handlePhotosChange}
+                  multiple
+                  accept="image/*"
+                  className="upload-input"
+                />
+              </label>
+
+              <p className="upload-hint">
+                Include front, side profile, and identifying marks
+              </p>
+            </div>
+
+            {formData.photos.length > 0 && (
+              <div className="photo-preview-grid">
+                {formData.photos.map((photo, index) => (
+                  <div key={index} className="photo-preview-container">
+                    <img
+                      src={URL.createObjectURL(photo)}
+                      alt={`Suspect ${index + 1}`}
+                      className="photo-preview"
+                    />
+                    <button
+                      type="button"
+                      className="remove-photo-btn"
+                      onClick={() => removePhoto(index)}
+                      aria-label="Remove photo"
+                    >
+                      <FaTrash />
+                    </button>
+                    {index === 0 && (
+                      <span className="primary-photo-label">Primary</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* Form Actions */}
+          <div className="form-actions">
+            <button
+              type="submit"
+              className="submit-btn"
+              disabled={loading || formData.photos.length < 4}
+            >
+              {loading ? (
+                <>
+                  <FaSpinner className="spinner" />
+                  Processing...
+                </>
+              ) : (
+                "Create Criminal Record"
+              )}
+            </button>
           </div>
-        </div>
-      </section>
+        </form>
+      </main>
     </div>
   );
 };

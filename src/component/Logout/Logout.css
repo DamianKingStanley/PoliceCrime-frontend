@@ -1,8 +1,8 @@
 /* Logout.css */
 
 .LogoutComponent button {
-  padding: 10px 20px;
-  background: #007bff;
+  padding: 10px;
+  background: inherit;
   color: white;
   border: none;
   border-radius: 4px;
@@ -15,7 +15,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  /* background: rgba(0, 0, 0, 0.5); */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,16 +23,20 @@
 }
 
 .logout-modal {
-  background: white;
+  background: var(--primary-blue);
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+}
+.logout-modal h2 {
+  font-size: 15px;
 }
 
 .modal-buttons {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
+  gap: 10px;
 }
 
 .modal-buttons button {
@@ -40,6 +44,8 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 15px;
+  font-weight: 300;
 }
 
 .modal-buttons button:first-child {

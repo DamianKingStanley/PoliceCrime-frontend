@@ -1,176 +1,272 @@
-.SignInbody {
-  background-image: url(../../assets/NPFF.png);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  color: white;
+/* Police Registration System Styles */
+:root {
+  --primary-blue: #1a237e;
+  --dark-blue: #0d1440;
+  --accent-red: #c62828;
+  --light-gray: #f5f7fa;
+  --medium-gray: #e0e5ec;
+  --dark-gray: #455a64;
+  --white: #ffffff;
+  --text-dark: #263238;
+  --success-green: #2e7d32;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
-.SignInbody::before {
+/* Base Styles */
+.registration-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--light-gray);
+  padding: 2rem;
+  background-image: radial-gradient(
+      circle at 10% 20%,
+      rgba(26, 35, 126, 0.03) 0%,
+      rgba(26, 35, 126, 0.03) 90%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(198, 40, 40, 0.03) 0%,
+      rgba(198, 40, 40, 0.03) 90%
+    );
+}
+
+.registration-card {
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  width: 100%;
+  max-width: 500px;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.registration-card::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--accent-red));
 }
 
-.register {
-  position: relative;
-  z-index: 2;
-  z-index: 1;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  z-index: 1;
-  position: relative;
-  height: fit-content;
-  max-width: 500px;
+/* Header Styles */
+.registration-header {
   text-align: center;
+  margin-bottom: 2rem;
 }
 
-.register input,
-.register select,
-.register button {
-  margin: 10px 0;
-  padding: 10px;
-  width: 460px;
-  /* max-width: 300px; */
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+.logo-link {
+  display: inline-block;
+  margin-bottom: 1rem;
 }
 
-.register button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
+.registration-logo {
+  height: 70px;
+  width: auto;
 }
 
-.register button:hover {
-  background-color: #0056b3;
+.system-title {
+  color: var(--primary-blue);
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
 }
 
-.register label {
-  margin-top: 10px;
-  font-size: 16px;
-  color: #333;
+.system-subtitle {
+  color: var(--dark-gray);
+  font-size: 1rem;
+  opacity: 0.9;
 }
 
-.register select {
-  background-color: white;
-  color: #333;
-}
-
-.pswd-container {
+/* Alert Messages */
+.alert-message {
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.alert-message.success {
+  background-color: #e8f5e9;
+  color: var(--success-green);
+  border-left: 4px solid var(--success-green);
+}
+
+.alert-message.error {
+  background-color: #ffebee;
+  color: var(--accent-red);
+  border-left: 4px solid var(--accent-red);
+}
+
+.alert-icon {
+  font-size: 1.1rem;
+}
+
+/* Form Styles */
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.input-icon {
+  color: var(--primary-blue);
+  font-size: 0.9rem;
+}
+
+.form-input,
+.form-select {
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--medium-gray);
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+}
+
+.form-input::placeholder {
+  color: var(--dark-gray);
+  opacity: 0.6;
+}
+
+/* Password Input Styles */
+.password-input-container {
   position: relative;
 }
 
-.pswd-container input {
-  flex: 1;
-}
-
-.pswd-toggle-icon {
+.password-toggle {
   position: absolute;
-  right: 10px;
-  cursor: pointer;
-  color: red;
-}
-
-#passwordmatchAlert p {
-  color: red;
-  font-size: 14px;
-  margin-top: -10px;
-  margin-bottom: 10px;
-}
-
-.success-message {
-  color: green;
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-
-.error-message {
-  color: red;
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-
-.loader {
-  position: fixed;
+  right: 0.8rem;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: 8px solid rgba(0, 0, 0, 0.1);
-  /* Light grey background */
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--dark-gray);
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.password-toggle:hover {
+  color: var(--primary-blue);
+}
+
+/* Button Styles */
+.register-button {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  padding: 0.9rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.register-button:hover {
+  background-color: var(--dark-blue);
+  transform: translateY(-1px);
+}
+
+.register-button:disabled {
+  background-color: var(--medium-gray);
+  cursor: not-allowed;
+}
+
+.button-spinner {
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 3px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  border-top: 8px solid #007bff;
-  /* Blue color for spinner */
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  z-index: 5;
+  border-top-color: var(--white);
+  animation: spin 1s ease-in-out infinite;
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
+  to {
     transform: rotate(360deg);
   }
 }
 
-.error-message {
-  color: #d9534f;
-  /* Red color for error messages */
-  background-color: #f2dede;
-  /* Light red background */
-  border: 1px solid #d9534f;
-  padding: 15px;
-  border-radius: 5px;
-  margin: 10px 0;
+/* Footer Styles */
+.registration-footer {
+  margin-top: 2rem;
   text-align: center;
+  font-size: 0.9rem;
+  color: var(--dark-gray);
 }
 
-.success-message {
-  color: #5bc0de;
-  /* Blue color for success messages */
-  background-color: #d9edf7;
-  /* Light blue background */
-  border: 1px solid #5bc0de;
-  padding: 15px;
-  border-radius: 5px;
-  margin: 10px 0;
-  text-align: center;
+.login-link {
+  margin-bottom: 0.5rem;
 }
 
-@media screen and (max-width: 980px) {
-  .register {
-    max-width: 300px;
+.login-link a {
+  color: var(--primary-blue);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+.security-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--dark-gray);
+  opacity: 0.8;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+  .registration-card {
+    padding: 1.5rem;
   }
-  .register input,
-  .register select,
-  .register button {
-    width: 250px;
+
+  .system-title {
+    font-size: 1.5rem;
   }
-  .loader {
-    position: fixed;
-    top: 40%;
-    left: 40%;
+
+  .registration-form {
+    gap: 1.2rem;
   }
 }

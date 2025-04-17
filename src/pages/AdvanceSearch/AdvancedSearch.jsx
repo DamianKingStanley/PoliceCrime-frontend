@@ -1,106 +1,267 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../component/AuthContext";
-import "./AdvancedSearch.css";
-import policelogo from "../../assets/policelogo.png";
+import {
+  FaSearch,
+  FaUser,
+  FaCalendarAlt,
+  FaGavel,
+  FaInfoCircle,
+  FaFilter,
+  FaSpinner,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
-import Loader from "../../component/Loader/Loader"; // Import the Loader component
+import Loader from "../../component/Loader/Loader";
+import policelogo from "../../assets/policelogo.png";
+import "./AdvancedSearch.css";
 
 const AdvancedSearch = () => {
-  const [crimeType, setCrimeType] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [status, setStatus] = useState("");
+  const [searchParams, setSearchParams] = useState({
+    crimeType: "",
+    startDate: "",
+    endDate: "",
+    status: "",
+  });
   const [records, setRecords] = useState([]);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
   const { token } = useAuth();
 
-  const handleSearch = async () => {
-    setLoading(true); // Show loader
-    setError(""); // Clear previous errors
+  const statusOptions = [
+    "Wanted",
+    "Arrested",
+    "Charged",
+    "Convicted",
+    "Sentenced",
+    "Incarcerated",
+    "Paroled",
+    "Released",
+    "Fugitive",
+    "Exonerated",
+    "Deceased",
+    "Under Investigation",
+    "Probation",
+    "Bail/Bond",
+  ];
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSearchParams((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
     try {
       const response = await axios.get(
         "https://policecrimeserver.onrender.com/record/advanced-search",
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
           params: {
-            crimeType,
-            startDate,
-            endDate,
-            status,
+            crimeType: searchParams.crimeType,
+            startDate: searchParams.startDate,
+            endDate: searchParams.endDate,
+            status: searchParams.status,
           },
         }
       );
+
+      if (response.data.length === 0) {
+        setError("No records match your search criteria");
+      }
       setRecords(response.data);
     } catch (err) {
-      console.error("Error:", err.response || err.message);
-      setError("No records found or an error occurred.");
+      console.error("Search error:", err.response || err.message);
+      setError("Failed to complete search. Please try again.");
       setRecords([]);
     } finally {
-      setLoading(false); // Hide loader
+      setLoading(false);
     }
   };
 
+  const clearFilters = () => {
+    setSearchParams({
+      crimeType: "",
+      startDate: "",
+      endDate: "",
+      status: "",
+    });
+    setRecords([]);
+    setError("");
+  };
+
   return (
-    <div className="AdvancedSearch">
-      {loading && <Loader />} {/* Show loader when loading */}
-      <div className="NPFlogodiv">
-        <Link to="/">
-          <img src={policelogo} alt="logo" />
+    <div className="advanced-search-container">
+      {/* Header Section */}
+      <header className="search-header">
+        <Link to="/" className="logo-link">
+          <img
+            src={policelogo}
+            alt="Police Department Logo"
+            className="search-logo"
+          />
         </Link>
-      </div>
-      <h2>Advanced Search for Records</h2>
-      <div className="searchCriteria">
-        <input
-          type="text"
-          value={crimeType}
-          onChange={(e) => setCrimeType(e.target.value)}
-          placeholder="Crime Type"
-        />
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
-        <input
-          type="text"
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          placeholder="Status"
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
-      {error && <p className="error-message">{error}</p>}
-      {records.length > 0 && (
-        <div className="searchResults">
-          <h3>Results</h3>
-          <ul>
-            {records.map((record) => (
-              <li key={record._id} className="SearchrecordItem">
-                <h4>{record.name}</h4>
-                <p>Status: {record.status.join(", ")}</p>
-                <ul>
-                  {record.crimes.map((crime, index) => (
-                    <li key={index}>
-                      <p>Type: {crime.type}</p>
-                      <p>Date: {new Date(crime.date).toLocaleDateString()}</p>
-                      <p>Status: {crime.status}</p>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+        <h1 className="page-title">
+          <FaFilter className="title-icon" />
+          Advanced Records Search
+        </h1>
+      </header>
+
+      {/* Main Content */}
+      <main className="search-main">
+        {/* Search Panel */}
+        <section className="search-panel">
+          <form onSubmit={handleSearch} className="search-form">
+            <div className="form-group">
+              <label htmlFor="crimeType" className="form-label">
+                <FaGavel className="input-icon" />
+                Crime Type
+              </label>
+              <input
+                type="text"
+                id="crimeType"
+                name="crimeType"
+                value={searchParams.crimeType}
+                onChange={handleChange}
+                placeholder="e.g. Burglary, Assault"
+                className="form-input"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="status" className="form-label">
+                <FaInfoCircle className="input-icon" />
+                Legal Status
+              </label>
+              <select
+                id="status"
+                name="status"
+                value={searchParams.status}
+                onChange={handleChange}
+                className="form-select"
+              >
+                <option value="">Any Status</option>
+                {statusOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="date-range-group">
+              <div className="form-group">
+                <label htmlFor="startDate" className="form-label">
+                  <FaCalendarAlt className="input-icon" />
+                  Start Date
+                </label>
+                <input
+                  type="date"
+                  id="startDate"
+                  name="startDate"
+                  value={searchParams.startDate}
+                  onChange={handleChange}
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="endDate" className="form-label">
+                  <FaCalendarAlt className="input-icon" />
+                  End Date
+                </label>
+                <input
+                  type="date"
+                  id="endDate"
+                  name="endDate"
+                  value={searchParams.endDate}
+                  onChange={handleChange}
+                  className="form-input"
+                />
+              </div>
+            </div>
+
+            <div className="form-actions">
+              <button
+                type="submit"
+                className="search-button"
+                disabled={loading}
+              >
+                <FaSearch className="button-icon" />
+                {loading ? "Searching..." : "Search Records"}
+              </button>
+
+              <button
+                type="button"
+                className="clear-button"
+                onClick={clearFilters}
+              >
+                Clear Filters
+              </button>
+            </div>
+          </form>
+        </section>
+
+        {/* Results Section */}
+        <section className="results-section">
+          {error && (
+            <div className="error-message">
+              <FaInfoCircle className="error-icon" />
+              {error}
+            </div>
+          )}
+
+          {records.length >= 0 && (
+            <div className="results-container">
+              <h2 className="results-header">
+                Search Results: {records.length}{" "}
+                {records.length === 1 ? "Match" : "Matches"}
+              </h2>
+
+              <div className="records-grid">
+                {records.map((record) => (
+                  <div key={record._id} className="record-card">
+                    <div className="record-header">
+                      <FaUser className="record-icon" />
+                      <h3 className="record-name">{record.name}</h3>
+                      <div className="record-status">
+                        {record.status.join(", ")}
+                      </div>
+                    </div>
+
+                    <div className="crimes-list">
+                      <h4>Criminal Offenses:</h4>
+                      <ul>
+                        {record.crimes.map((crime, index) => (
+                          <li key={index} className="crime-item">
+                            <div className="crime-type">
+                              <FaGavel className="crime-icon" />
+                              <strong>{crime.type}</strong>
+                            </div>
+                            <div className="crime-details">
+                              <span className="crime-date">
+                                <FaCalendarAlt className="detail-icon" />
+                                {new Date(crime.date).toLocaleDateString()}
+                              </span>
+                              <span
+                                className={`crime-status ${crime.status.toLowerCase()}`}
+                              >
+                                {crime.status}
+                              </span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      </main>
     </div>
   );
 };
